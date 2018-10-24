@@ -19,7 +19,8 @@ namespace MyMovies
         {
             User newUser1 = new User();
 
-            newUser1.RegisterUser();
+            //newUser1.RegisterUser();
+            newUser1.LogIn();
 
             Console.ReadLine();
         }

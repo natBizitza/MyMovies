@@ -112,7 +112,7 @@ namespace MyMovies
         {
             string username, password;
 
-            bool IsCorrect = false;
+            bool IsRegistered = false;
 
             Console.WriteLine("**************** LOG IN **********************");
             do
@@ -129,13 +129,17 @@ namespace MyMovies
                 cadena = "SELECT * from CLIENT where Password LIKE '" + password + "'";
                 comando = new SqlCommand(cadena, conexion);
                 SqlDataReader registros = comando.ExecuteReader();
-                IsCorrect = registros.Read();
+                IsRegistered = registros.Read();
                 conexion.Close();
                 registros.Close();
 
-                Console.WriteLine("Username or password is not correct. Try again.");
+                if(!IsRegistered)
+                {
+                    Console.WriteLine("Username or password is not correct. Try again.");
+                }
+                
                 //check the boolean below
-            } while (!IsCorrect);
+            } while (!IsRegistered);
 
             Console.WriteLine("You are successfully logged in!");
         }
