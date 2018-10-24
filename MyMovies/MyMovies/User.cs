@@ -1,26 +1,38 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Configuration;
 
 namespace MyMovies
 {
     class User
     {
+        static String connectionString = ConfigurationManager.ConnectionStrings["MOVIES"].ConnectionString;
+        static SqlConnection conexion = new SqlConnection(connectionString);
+        static string cadena;
+        static SqlCommand comando;
+
         private string username, name, password;
         private DateTime dateBirth;
 
         //constuctor
-        public User(string username, string name, string password, int year, int month, int day)
+        //public User(string username, string name, string password, int year, int month, int day)
+        //{
+        //    this.username = username;
+        //    this.name = name;
+        //    this.password = password;
+        //    //TODO: fix the date thing
+        //    this.dateBirth = new DateTime(year, month, day);
+        //    //this.dateBirth.Year;
+        //    //this.dateBirth.Month;
+        //}
+
+        public User()
         {
-            this.username = username;
-            this.name = name;
-            this.password = password;
-            //TODO: fix the date thing
-            this.dateBirth = new DateTime(year, month, day);
-            //this.dateBirth.Year;
-            //this.dateBirth.Month;
+            
         }
         // Get & Set() 
         public string GetUsername()
@@ -48,10 +60,10 @@ namespace MyMovies
             return dateBirth.ToString();
         }
 
-        public void SetDateBirth(DateTime dateBirth)
-        {
-            this.dateBirth = DateTime.Today.ToString();
-        }
+        //public void SetDateBirth(DateTime dateBirth)
+        //{
+        //    this.dateBirth = DateTime.Today.ToString();
+        //}
 
         public string GetPassword()
         {
@@ -63,38 +75,40 @@ namespace MyMovies
             this.password = password;
         }
 
-        public static void RegisterClient()
+        public void RegisterUser()
         {
             string username, name, password;
             //change it
-            DateTime dateBirth;
+            string dateOfBirth;
 
-            Console.WriteLine("Welcome to MyMovies!\nPlease, introduce your data. Enter your user name: ");
+            Console.WriteLine("Welcome to MyMovies!\nPlease, introduce your data. Enter your Username: ");
             username = Console.ReadLine();
             Console.WriteLine("Enter your Name: ");
             name = Console.ReadLine();
-            Console.WriteLine("Enter your year of birth: ");
-            dateBirth.Year = Console.ReadLine();
-            Console.WriteLine("Enter your month of birth: ");
-            dateBirth.Month = Console.ReadLine();
-            Console.WriteLine("Enter your day of birth: ");
-            dateBirth = Console.ReadLine();
+            Console.WriteLine("Enter your date of birth (dd/MM/YYYY): ");
+            dateOfBirth = Console.ReadLine();
+            //Console.WriteLine("Enter your month of birth (MM): ");
+            //month = Console.ReadLine();
+            //Console.WriteLine("Enter your year of birth (yyyy): ");
+            //year = Console.ReadLine();
+            //string yourDateOfBirth = day + "/" + month + "/" + year;
+            //Console.WriteLine("Your date of birth is " + yourDateOfBirth);
             Console.WriteLine("Enter your password: ");
             password = Console.ReadLine();
 
-            Console.WriteLine("You are successfully signed up. You are ready to enjoy MyMovies!");
+            Console.WriteLine("You are successfully signed up. Enjoy MyMovies!");
 
-            //conexion.Open();
+            conexion.Open();
 
-            //cadena = "INSERT INTO CLIENT VALUES ('" + DNI + "','" + nameClient + "','" + surnameClient + "')";
-            //comando = new SqlCommand(cadena, conexion);
-            //comando.ExecuteNonQuery();
+            cadena = "INSERT INTO CLIENT VALUES ('" + username + "','" + name + "','" + dateOfBirth + "','"+password+"')";
+            comando = new SqlCommand(cadena, conexion);
+            comando.ExecuteNonQuery();
 
-            //conexion.Close();
+            conexion.Close();
 
         }
 
-        public static void LogIn()
+        public void LogIn()
         {
             string username, password;
 
@@ -102,25 +116,28 @@ namespace MyMovies
 
             Console.WriteLine("**************** LOG IN **********************");
             do
-            { 
+            {
                 Console.WriteLine("Username: ");
                 username = Console.ReadLine();
-
+               
                 Console.WriteLine("Password: ");
                 password = Console.ReadLine();
+
                 //TODO: add condition if password==pasword and username==username -> user menu
                 conexion.Open();
-                cadena = "SELECT * from CLIENT where DNI LIKE '" + DNI + "'";
+                cadena = "SELECT * from CLIENT where UserName LIKE '" + username + "'";
+                cadena = "SELECT * from CLIENT where Password LIKE '" + password + "'";
                 comando = new SqlCommand(cadena, conexion);
                 SqlDataReader registros = comando.ExecuteReader();
-                IsRegistered = registros.Read();
+                IsCorrect = registros.Read();
                 conexion.Close();
                 registros.Close();
 
+                Console.WriteLine("Username or password is not correct. Try again.");
                 //check the boolean below
             } while (!IsCorrect);
 
-
+            Console.WriteLine("You are successfully logged in!");
         }
 
 
