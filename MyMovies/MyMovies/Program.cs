@@ -18,9 +18,13 @@ namespace MyMovies
         static void Main(string[] args)
         {
             User newUser1 = new User();
+            Movies newMovie = new Movies();
 
             //newUser1.RegisterUser();
-            newUser1.LogIn();
+            //newUser1.LogIn();
+            newMovie.ShowAllMovies();
+
+
 
             Console.ReadLine();
         }
