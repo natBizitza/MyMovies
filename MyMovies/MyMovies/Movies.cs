@@ -17,19 +17,26 @@ namespace MyMovies
 
         private string movie, rentals;
 
+        
 
         public void ShowAllMovies()
         {
+
             SqlDataReader age;
             int compareAge;
+            //string username;
             conexion.Open();
 
-            cadena = "SELECT DATEDIFF(year,DateBirth,GETDATE()) FROM CLIENT WHERE UserName LIKE 'Nat1994'";
+            //Console.WriteLine("Username:");
+            //username = Console.ReadLine();
+
+            cadena = "SELECT DATEDIFF(year,DateBirth,GETDATE()) AS filter FROM CLIENT WHERE UserName LIKE '" + UserName + "'";
             comando = new SqlCommand(cadena, conexion);
             age = comando.ExecuteReader();
 
             age.Read();
-            compareAge = Convert.ToInt32(age[0].ToString());
+            //extracting from the query array the result from the column filter
+            compareAge = Convert.ToInt32(age["filter"].ToString());
 
             conexion.Close();
 
