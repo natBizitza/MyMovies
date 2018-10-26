@@ -144,6 +144,9 @@ namespace MyMovies
             Console.WriteLine("You are successfully logged in!");
         }
 
+        public void GetAge()
+        {
 
+        }
     }
 }

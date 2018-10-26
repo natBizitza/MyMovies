@@ -17,16 +17,31 @@ namespace MyMovies
 
         private string movie, rentals;
 
+
         public void ShowAllMovies()
         {
+            SqlDataReader age;
+            int compareAge;
+            conexion.Open();
+
+            cadena = "SELECT DATEDIFF(year,DateBirth,GETDATE()) FROM CLIENT WHERE UserName LIKE 'Nat1994'";
+            comando = new SqlCommand(cadena, conexion);
+            age = comando.ExecuteReader();
+
+            age.Read();
+            compareAge = Convert.ToInt32(age[0].ToString());
+
+            conexion.Close();
+
             SqlDataReader registros;
 
             Console.WriteLine("Available Movies: ");
             //Console.ReadLine();
 
+
             conexion.Open();
             
-            cadena = "SELECT MovieName FROM MOVIE where Availability='A'";
+            cadena = "SELECT MovieName FROM MOVIE where AgeRestriction<= " + compareAge;
             comando = new SqlCommand(cadena, conexion);
             registros = comando.ExecuteReader();
 

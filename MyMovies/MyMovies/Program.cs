@@ -20,6 +20,7 @@ namespace MyMovies
             User newUser1 = new User();
             Movies newMovie = new Movies();
 
+
             //newUser1.RegisterUser();
             //newUser1.LogIn();
             newMovie.ShowAllMovies();
