@@ -15,8 +15,12 @@ namespace MyMovies
         static string cadena;
         static SqlCommand comando;
         static List<User> registeredUser;
+        static List<Movies> allMoviesForUser;
         static private User user;
-        static private string username, name, password;
+        static private Movies movie;
+
+
+        //static private string username, name, password;
 
         static void Main(string[] args)
         {
@@ -94,9 +98,9 @@ namespace MyMovies
                     case ALLMOVIES:
                         ShowAllMovies();
                         break;
-                    //case RENTMOVIE:
-                    //    RentMovie();
-                    //    break;
+                    case RENTMOVIE:
+                        RentMovie();
+                        break;
                     case LOGOUT:
                         Console.WriteLine("You are back to the main menu.");
                         break;
@@ -141,7 +145,7 @@ namespace MyMovies
 
         public static  void LogIn()
         {
-            //string username, password;
+            string username, password;
 
             bool IsRegistered = false;
 
@@ -231,33 +235,75 @@ namespace MyMovies
 
             conexion.Open();
 
-            cadena = "SELECT MovieName FROM MOVIE where AgeRestriction<= " + compareAge;
+            cadena = "SELECT IdMovie, MovieName, Director, CountryOfOrigin, Synopsis, AgeRestriction, Availability FROM MOVIE where AgeRestriction<= " + compareAge;
             comando = new SqlCommand(cadena, conexion);
             registros = comando.ExecuteReader();
 
             // to show the available rooms
             while (registros.Read())
             {
-                Console.WriteLine(registros["MovieName"].ToString());
+                Console.WriteLine("ID: "+registros["IdMovie"].ToString());
+                Console.WriteLine("Name: " + registros["MovieName"].ToString());
+                Console.WriteLine("Director: " + registros["Director"].ToString());
+                Console.WriteLine("Country of Origin: " + registros["CountryOfOrigin"].ToString());
+                Console.WriteLine("Synopsis: " + registros["Synopsis"].ToString());
+                Console.WriteLine("Age Restriction: " + registros["AgeRestriction"].ToString());
+                Console.WriteLine("Availability (A/N): " + registros["Availability"].ToString());
+
+                movie = new Movies();
+
+                allMoviesForUser = new List<Movies>();
+                //TODO: below list
+                allMoviesForUser.Add(movie);
+
                 Console.WriteLine();
             }
             Console.ReadLine();
             conexion.Close();
         }
 
-        //public static void RentMovie()
-        //{
-        //    string movieChoice;
-        //    bool isExisted;
-        //    Console.WriteLine("************ RENT A MOVIE ***************");
+        public static void RentMovie()
+        {
+            string movieChoice;
+            bool isExisted;
 
-        //    do
-        //    {
-        //        Console.WriteLine("Type a name of a movie you would like to rent.");
-        //        movieChoice = Console.ReadLine();
+            Console.WriteLine("************ YOU ARE ABOUT TO HAVE IT ***************");
 
-                
-        //    } while ();
-        //}
+            foreach (Movies movie in allMoviesForUser)
+            {
+                Console.WriteLine(movie.GetName());
+                break;
+            }
+
+            //do
+            //{
+            //    Console.WriteLine("Type a name of a movie you would like to watch.");
+            //    movieChoice = Console.ReadLine();
+
+            //    conexion.Open();
+            //    cadena = "SELECT * from MOVIE where MovieName LIKE '" + movieChoice + "' and Availablity LIKE 'A' ";
+            //    comando = new SqlCommand(cadena, conexion);
+            //    SqlDataReader registros = comando.ExecuteReader();
+            //    isExisted = registros.Read();
+            //    if (!isExisted)
+            //    {
+
+            //        Console.WriteLine("This movie is unavailable or unfortunately doesn't exist in MyMovies yet.");
+            //    }
+            //    else
+            //    {
+
+            //        user = new User();
+            //        user.SetUsername(registros["UserName"].ToString());
+            //        user.SetName(registros["Name"].ToString());
+            //        user.SetDateBirth(registros["DateBirth"].ToString());
+            //        user.SetPassword(registros["Password"].ToString());
+
+            //        //registeredUser.Add(user);
+
+
+            //    } while() ;
+            
+        }
     }
 }

@@ -15,9 +15,14 @@ namespace MyMovies
         static string cadena;
         static SqlCommand comando;
 
-        private string movie, rentals;
+        private string movie, name, rentals;
 
-        
+        //GEt & SEt
+
+        public string GetName()
+        {
+            return name;
+        }
 
     //    public void ShowAllMovies()
     //    {
