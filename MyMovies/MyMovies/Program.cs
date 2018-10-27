@@ -239,6 +239,7 @@ namespace MyMovies
             comando = new SqlCommand(cadena, conexion);
             registros = comando.ExecuteReader();
 
+            //TODO:MOVe IT OUT OF HERE, cause otherwise you can´trent a movie directly usinf the list allmovesFor User
             // to show the available rooms
             while (registros.Read())
             {
@@ -269,11 +270,18 @@ namespace MyMovies
 
             Console.WriteLine("************ YOU ARE ABOUT TO HAVE IT ***************");
 
-            foreach (Movies movie in allMoviesForUser)
+            foreach  (Movies movie in allMoviesForUser)
             {
-                Console.WriteLine(movie.GetName());
-                break;
+                Console.WriteLine(movie.GetType().Name);
+                Console.WriteLine(movie.ToString());
             }
+
+            Console.ReadLine();
+            //foreach (Movies movie in allMoviesForUser)
+            //{
+            //    Console.WriteLine(movie.GetName());
+            //    break;
+            //}
 
             //do
             //{
