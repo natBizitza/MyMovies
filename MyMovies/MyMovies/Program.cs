@@ -15,13 +15,15 @@ namespace MyMovies
         static string cadena;
         static SqlCommand comando;
         static List<User> registeredUser;
-        //private User newUser;
+        static private User user;
+        static private string username, name, password;
+
         static void Main(string[] args)
         {
             //List<User> registeredUser = new List<User>();
             ////const int REGISTER = 1, LOGIN = 2, EXIT = 3;
 
-            User newUser = new User();
+            //User newUser = new User();
             //Movies newMovie = new Movies();
 
 
@@ -92,9 +94,9 @@ namespace MyMovies
                     case ALLMOVIES:
                         ShowAllMovies();
                         break;
-                    case RENTMOVIE:
-                        RentMovie();
-                        break;
+                    //case RENTMOVIE:
+                    //    RentMovie();
+                    //    break;
                     case LOGOUT:
                         Console.WriteLine("You are back to the main menu.");
                         break;
@@ -139,7 +141,7 @@ namespace MyMovies
 
         public static  void LogIn()
         {
-            string username, password;
+            //string username, password;
 
             bool IsRegistered = false;
 
@@ -156,8 +158,7 @@ namespace MyMovies
 
                 //TODO: add condition if password==pasword and username==username -> user menu
                 conexion.Open();
-                cadena = "SELECT * from CLIENT where UserName LIKE '" + username + "'";
-                cadena = "SELECT * from CLIENT where Password LIKE '" + password + "'";
+                cadena = "SELECT * from CLIENT where UserName LIKE '" + username + "' and Password LIKE '" + password + "'"; 
                 comando = new SqlCommand(cadena, conexion);
                 SqlDataReader registros = comando.ExecuteReader();
                 IsRegistered = registros.Read();
@@ -169,13 +170,13 @@ namespace MyMovies
                 else
                 {
 
-                    User newUser = new User();
-                    newUser.SetUsername(registros["UserName"].ToString());
-                    newUser.SetName(registros["Name"].ToString());
-                    newUser.SetDateBirth(registros["DateBirth"].ToString());
-                    newUser.SetPassword(registros["Password"].ToString());
+                    user = new User();
+                    user.SetUsername(registros["UserName"].ToString());
+                    user.SetName(registros["Name"].ToString());
+                    user.SetDateBirth(registros["DateBirth"].ToString());
+                    user.SetPassword(registros["Password"].ToString());
 
-                    registeredUser.Add(newUser);
+                    //registeredUser.Add(user);
 
                     // to test the list of registereduser
 
@@ -202,14 +203,14 @@ namespace MyMovies
         {
             SqlDataReader age;
             int compareAge;
-            string username;
+            //string username;
             conexion.Open();
 
-            Console.WriteLine("Username:");
-            username = Console.ReadLine();
+            //Console.WriteLine("Username:");
+            //username = Console.ReadLine();
 
-            cadena = "SELECT DATEDIFF(year,DateBirth,GETDATE()) AS filter FROM CLIENT WHERE UserName LIKE '" + newUser + "'";
-            cadena = "SELECT DATEDIFF(year,DateBirth,GETDATE()) AS filter FROM CLIENT WHERE UserName LIKE 'Nat1994'";
+            cadena = "SELECT DATEDIFF(year,DateBirth,GETDATE()) AS filter FROM CLIENT WHERE UserName LIKE '" + user.GetUsername() + "'";
+            //cadena = "SELECT DATEDIFF(year,DateBirth,GETDATE()) AS filter FROM CLIENT WHERE UserName LIKE 'Nat1994'";
 
             comando = new SqlCommand(cadena, conexion);
             age = comando.ExecuteReader();
@@ -244,14 +245,19 @@ namespace MyMovies
             conexion.Close();
         }
 
-        public static void RentMovie()
-        {
-            Console.WriteLine("************ RENT A MOVIE ***************");
+        //public static void RentMovie()
+        //{
+        //    string movieChoice;
+        //    bool isExisted;
+        //    Console.WriteLine("************ RENT A MOVIE ***************");
 
-            do
-            {
-                Console.WriteLine("")
-            }
-        }
+        //    do
+        //    {
+        //        Console.WriteLine("Type a name of a movie you would like to rent.");
+        //        movieChoice = Console.ReadLine();
+
+                
+        //    } while ();
+        //}
     }
 }

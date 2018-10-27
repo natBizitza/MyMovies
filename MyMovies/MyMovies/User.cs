@@ -26,7 +26,7 @@ namespace MyMovies
         //    this.name = name;
         //    this.password = password;
         //    //TODO: fix the date thing
-        //    this.dateBirth = new DateTime(year, month, day);
+            //this.dateBirth = new DateTime(year, month, day);
         //    //this.dateBirth.Year;
         //    //this.dateBirth.Month;
         //}
