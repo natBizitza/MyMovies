@@ -14,14 +14,14 @@ namespace MyMovies
         static SqlConnection conexion = new SqlConnection(connectionString);
         static string cadena;
         static SqlCommand comando;
-
-        //List<User> registeredUser = new List <User>();
-
+        static List<User> registeredUser;
+        //private User newUser;
         static void Main(string[] args)
         {
-            //const int REGISTER = 1, LOGIN = 2, EXIT = 3;
+            //List<User> registeredUser = new List<User>();
+            ////const int REGISTER = 1, LOGIN = 2, EXIT = 3;
 
-            //User newUser1 = new User();
+            User newUser = new User();
             //Movies newMovie = new Movies();
 
 
@@ -92,9 +92,9 @@ namespace MyMovies
                     case ALLMOVIES:
                         ShowAllMovies();
                         break;
-                    //case RENTMOVIE:
-                    //    RentMovie();
-                    //    break;
+                    case RENTMOVIE:
+                        RentMovie();
+                        break;
                     case LOGOUT:
                         Console.WriteLine("You are back to the main menu.");
                         break;
@@ -143,7 +143,7 @@ namespace MyMovies
 
             bool IsRegistered = false;
 
-            List<User> registeredUser = new List<User>();
+            //List<User> registeredUser = new List<User>();
 
             Console.WriteLine("**************** LOG IN **********************");
             do
@@ -177,6 +177,14 @@ namespace MyMovies
 
                     registeredUser.Add(newUser);
 
+                    // to test the list of registereduser
+
+                    //foreach (User person in registeredUser)
+                    //{
+                    //    Console.WriteLine(person.GetType().Name.ToUpper());
+                    //    break;
+                    //}
+
                     //conexion.Close();
                     //registros.Close();
                 }
@@ -186,35 +194,38 @@ namespace MyMovies
             } while (!IsRegistered);
 
             Console.WriteLine("You are successfully logged in!");
+
+                //ShowAllMovies();
         }
 
         public static void ShowAllMovies()
         {
-
             SqlDataReader age;
             int compareAge;
-            //string username;
+            string username;
             conexion.Open();
 
-            //Console.WriteLine("Username:");
-            //username = Console.ReadLine();
+            Console.WriteLine("Username:");
+            username = Console.ReadLine();
 
-            //cadena = "SELECT DATEDIFF(year,DateBirth,GETDATE()) AS filter FROM CLIENT WHERE UserName LIKE '" + UserName + "'";
+            cadena = "SELECT DATEDIFF(year,DateBirth,GETDATE()) AS filter FROM CLIENT WHERE UserName LIKE '" + newUser + "'";
             cadena = "SELECT DATEDIFF(year,DateBirth,GETDATE()) AS filter FROM CLIENT WHERE UserName LIKE 'Nat1994'";
 
             comando = new SqlCommand(cadena, conexion);
             age = comando.ExecuteReader();
 
             age.Read();
-            //extracting from the query array the result from the column filter
+            // extracting from the query array the result from the column filter
             compareAge = Convert.ToInt32(age["filter"].ToString());
+
+
 
             conexion.Close();
 
             SqlDataReader registros;
 
             Console.WriteLine("Available Movies: ");
-            //Console.ReadLine();
+            Console.ReadLine();
 
 
             conexion.Open();
@@ -231,6 +242,16 @@ namespace MyMovies
             }
             Console.ReadLine();
             conexion.Close();
+        }
+
+        public static void RentMovie()
+        {
+            Console.WriteLine("************ RENT A MOVIE ***************");
+
+            do
+            {
+                Console.WriteLine("")
+            }
         }
     }
 }

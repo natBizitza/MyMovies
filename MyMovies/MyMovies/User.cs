@@ -14,6 +14,7 @@ namespace MyMovies
         static SqlConnection conexion = new SqlConnection(connectionString);
         static string cadena;
         static SqlCommand comando;
+        //private List<User> registeredUser;
 
         private string username, name, password;
         private string dateBirth;
