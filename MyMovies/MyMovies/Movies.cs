@@ -19,48 +19,48 @@ namespace MyMovies
 
         
 
-        public void ShowAllMovies()
-        {
+    //    public void ShowAllMovies()
+    //    {
 
-            SqlDataReader age;
-            int compareAge;
-            //string username;
-            conexion.Open();
+    //        SqlDataReader age;
+    //        int compareAge;
+    //        //string username;
+    //        conexion.Open();
 
-            //Console.WriteLine("Username:");
-            //username = Console.ReadLine();
+    //        //Console.WriteLine("Username:");
+    //        //username = Console.ReadLine();
 
-            cadena = "SELECT DATEDIFF(year,DateBirth,GETDATE()) AS filter FROM CLIENT WHERE UserName LIKE '" + UserName + "'";
-            comando = new SqlCommand(cadena, conexion);
-            age = comando.ExecuteReader();
+    //        cadena = "SELECT DATEDIFF(year,DateBirth,GETDATE()) AS filter FROM CLIENT WHERE UserName LIKE '" + UserName + "'";
+    //        comando = new SqlCommand(cadena, conexion);
+    //        age = comando.ExecuteReader();
 
-            age.Read();
-            //extracting from the query array the result from the column filter
-            compareAge = Convert.ToInt32(age["filter"].ToString());
+    //        age.Read();
+    //        //extracting from the query array the result from the column filter
+    //        compareAge = Convert.ToInt32(age["filter"].ToString());
 
-            conexion.Close();
+    //        conexion.Close();
 
-            SqlDataReader registros;
+    //        SqlDataReader registros;
 
-            Console.WriteLine("Available Movies: ");
-            //Console.ReadLine();
+    //        Console.WriteLine("Available Movies: ");
+    //        //Console.ReadLine();
 
 
-            conexion.Open();
+    //        conexion.Open();
             
-            cadena = "SELECT MovieName FROM MOVIE where AgeRestriction<= " + compareAge;
-            comando = new SqlCommand(cadena, conexion);
-            registros = comando.ExecuteReader();
+    //        cadena = "SELECT MovieName FROM MOVIE where AgeRestriction<= " + compareAge;
+    //        comando = new SqlCommand(cadena, conexion);
+    //        registros = comando.ExecuteReader();
 
-            // to show the available rooms
-            while (registros.Read())
-            {
-                Console.WriteLine(registros["MovieName"].ToString());
-                Console.WriteLine();
-            }
-            Console.ReadLine();
-            conexion.Close();
-        }
+    //        // to show the available rooms
+    //        while (registros.Read())
+    //        {
+    //            Console.WriteLine(registros["MovieName"].ToString());
+    //            Console.WriteLine();
+    //        }
+    //        Console.ReadLine();
+    //        conexion.Close();
+    //    }
 
     }
 }

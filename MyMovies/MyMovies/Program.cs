@@ -15,25 +15,96 @@ namespace MyMovies
         static string cadena;
         static SqlCommand comando;
 
+        //List<User> registeredUser = new List <User>();
+
         static void Main(string[] args)
         {
-            User newUser1 = new User();
-            Movies newMovie = new Movies();
+            //const int REGISTER = 1, LOGIN = 2, EXIT = 3;
+
+            //User newUser1 = new User();
+            //Movies newMovie = new Movies();
 
 
-            //newUser1.RegisterUser();
+            ////newUser1.RegisterUser();
             //newUser1.LogIn();
-            newMovie.ShowAllMovies();
+            ////newMovie.ShowAllMovies();
 
-
+            Menu();
 
             Console.ReadLine();
+        }
+        public static void Menu()
+        {
+
+            const int REGISTER = 1, LOGIN = 2, EXIT = 3;
+            int option;
+            Console.WriteLine("WELCOME to MyMovies");
+
+            do
+            {
+                // Menú principal
+                Console.WriteLine("Choose an option");
+                Console.WriteLine("1- Register as a MymMovies user");
+                Console.WriteLine("2- Log In");
+                Console.WriteLine("3- Exit Menu");
+                option = Convert.ToInt32(Console.ReadLine());
+
+                Console.WriteLine();
+                switch (option)
+                {
+                    case REGISTER:
+                        RegisterUser();
+                        break;
+                    case LOGIN:
+                        LogIn();
+                        break;
+                    case EXIT:
+                        Console.WriteLine("You are out of MyMovies. Thanks for visiting!");
+                        break;
+                }
+            } while (option!=3);
+        }
+        public static void RegisterUser()
+        {
+            string username, name, password;
+            //change it
+            string dateOfBirth;
+
+            Console.WriteLine("Welcome to MyMovies!\nPlease, enter your Username: ");
+            username = Console.ReadLine();
+            Console.WriteLine("Enter your Name: ");
+            name = Console.ReadLine();
+            Console.WriteLine("Enter your date of birth (dd/MM/YYYY): ");
+            dateOfBirth = Console.ReadLine();
+            //Console.WriteLine("Enter your month of birth (MM): ");
+            //month = Console.ReadLine();
+            //Console.WriteLine("Enter your year of birth (yyyy): ");
+            //year = Console.ReadLine();
+            //string yourDateOfBirth = day + "/" + month + "/" + year;
+            //Console.WriteLine("Your date of birth is " + yourDateOfBirth);
+            Console.WriteLine("Enter your password: ");
+            password = Console.ReadLine();
+
+            Console.WriteLine("You are successfully signed up. Enjoy MyMovies!");
+
+            conexion.Open();
+
+            cadena = "INSERT INTO CLIENT VALUES ('" + username + "','" + name + "','" + dateOfBirth + "','" + password + "')";
+            comando = new SqlCommand(cadena, conexion);
+            comando.ExecuteNonQuery();
+
+
+
+            conexion.Close();
+
         }
         public static  void LogIn()
         {
             string username, password;
 
             bool IsRegistered = false;
+
+            List<User> registeredUser = new List<User>();
 
             Console.WriteLine("**************** LOG IN **********************");
             do
@@ -58,14 +129,18 @@ namespace MyMovies
                 }
                 else
                 {
-                    
-                    User u1 = new User();
-                    u1.SetName(registros["UserName"].ToString());
-                    //all the attributes
-                    u1.SetName
 
-                conexion.Close();
-                registros.Close();
+                    User newUser = new User();
+                    newUser.SetUsername(registros["UserName"].ToString());
+                    newUser.SetName(registros["Name"].ToString());
+                    newUser.SetDateBirth(registros["DateBirth"].ToString());
+                    newUser.SetPassword(registros["Password"].ToString());
+
+                    registeredUser.Add(newUser);
+
+                    conexion.Close();
+                    registros.Close();
+                }
                 //check the boolean below
             } while (!IsRegistered);
             Console.WriteLine("You are successfully logged in!");

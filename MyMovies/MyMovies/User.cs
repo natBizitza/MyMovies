@@ -16,7 +16,7 @@ namespace MyMovies
         static SqlCommand comando;
 
         private string username, name, password;
-        private DateTime dateBirth;
+        private string dateBirth;
 
         //constuctor
         //public User(string username, string name, string password, int year, int month, int day)
@@ -60,10 +60,10 @@ namespace MyMovies
             return dateBirth.ToString();
         }
 
-        //public void SetDateBirth(DateTime dateBirth)
-        //{
-        //    this.dateBirth = DateTime.Today.ToString();
-        //}
+        public void  SetDateBirth(string dateBirth)
+        {
+            this.dateBirth = dateBirth;
+        }
 
         public string GetPassword()
         {
@@ -75,74 +75,74 @@ namespace MyMovies
             this.password = password;
         }
 
-        public void RegisterUser()
-        {
-            string username, name, password;
-            //change it
-            string dateOfBirth;
+        //public void RegisterUser()
+        //{
+        //    string username, name, password;
+        //    //change it
+        //    string dateOfBirth;
 
-            Console.WriteLine("Welcome to MyMovies!\nPlease, introduce your data. Enter your Username: ");
-            username = Console.ReadLine();
-            Console.WriteLine("Enter your Name: ");
-            name = Console.ReadLine();
-            Console.WriteLine("Enter your date of birth (dd/MM/YYYY): ");
-            dateOfBirth = Console.ReadLine();
-            //Console.WriteLine("Enter your month of birth (MM): ");
-            //month = Console.ReadLine();
-            //Console.WriteLine("Enter your year of birth (yyyy): ");
-            //year = Console.ReadLine();
-            //string yourDateOfBirth = day + "/" + month + "/" + year;
-            //Console.WriteLine("Your date of birth is " + yourDateOfBirth);
-            Console.WriteLine("Enter your password: ");
-            password = Console.ReadLine();
+        //    Console.WriteLine("Welcome to MyMovies!\nPlease, introduce your data. Enter your Username: ");
+        //    username = Console.ReadLine();
+        //    Console.WriteLine("Enter your Name: ");
+        //    name = Console.ReadLine();
+        //    Console.WriteLine("Enter your date of birth (dd/MM/YYYY): ");
+        //    dateOfBirth = Console.ReadLine();
+        //    //Console.WriteLine("Enter your month of birth (MM): ");
+        //    //month = Console.ReadLine();
+        //    //Console.WriteLine("Enter your year of birth (yyyy): ");
+        //    //year = Console.ReadLine();
+        //    //string yourDateOfBirth = day + "/" + month + "/" + year;
+        //    //Console.WriteLine("Your date of birth is " + yourDateOfBirth);
+        //    Console.WriteLine("Enter your password: ");
+        //    password = Console.ReadLine();
 
-            Console.WriteLine("You are successfully signed up. Enjoy MyMovies!");
+        //    Console.WriteLine("You are successfully signed up. Enjoy MyMovies!");
 
-            conexion.Open();
+        //    conexion.Open();
 
-            cadena = "INSERT INTO CLIENT VALUES ('" + username + "','" + name + "','" + dateOfBirth + "','"+password+"')";
-            comando = new SqlCommand(cadena, conexion);
-            comando.ExecuteNonQuery();
+        //    cadena = "INSERT INTO CLIENT VALUES ('" + username + "','" + name + "','" + dateOfBirth + "','"+password+"')";
+        //    comando = new SqlCommand(cadena, conexion);
+        //    comando.ExecuteNonQuery();
 
-            conexion.Close();
+        //    conexion.Close();
 
-        }
+        //}
 
-        public void LogIn()
-        {
-            string username, password;
+        //public void LogIn()
+        //{
+        //    string username, password;
 
-            bool IsRegistered = false;
+        //    bool IsRegistered = false;
 
-            Console.WriteLine("**************** LOG IN **********************");
-            do
-            {
-                Console.WriteLine("Username: ");
-                username = Console.ReadLine();
+        //    Console.WriteLine("**************** LOG IN **********************");
+        //    do
+        //    {
+        //        Console.WriteLine("Username: ");
+        //        username = Console.ReadLine();
                
-                Console.WriteLine("Password: ");
-                password = Console.ReadLine();
+        //        Console.WriteLine("Password: ");
+        //        password = Console.ReadLine();
 
-                //TODO: add condition if password==pasword and username==username -> user menu
-                conexion.Open();
-                cadena = "SELECT * from CLIENT where UserName LIKE '" + username + "'";
-                cadena = "SELECT * from CLIENT where Password LIKE '" + password + "'";
-                comando = new SqlCommand(cadena, conexion);
-                SqlDataReader registros = comando.ExecuteReader();
-                IsRegistered = registros.Read();
-                conexion.Close();
-                registros.Close();
+        //        //TODO: add condition if password==pasword and username==username -> user menu
+        //        conexion.Open();
+        //        cadena = "SELECT * from CLIENT where UserName LIKE '" + username + "'";
+        //        cadena = "SELECT * from CLIENT where Password LIKE '" + password + "'";
+        //        comando = new SqlCommand(cadena, conexion);
+        //        SqlDataReader registros = comando.ExecuteReader();
+        //        IsRegistered = registros.Read();
+        //        conexion.Close();
+        //        registros.Close();
 
-                if(!IsRegistered)
-                {
-                    Console.WriteLine("Username or password is not correct. Try again.");
-                }
+        //        if(!IsRegistered)
+        //        {
+        //            Console.WriteLine("Username or password is not correct. Try again.");
+        //        }
                 
-                //check the boolean below
-            } while (!IsRegistered);
+        //        //check the boolean below
+        //    } while (!IsRegistered);
 
-            Console.WriteLine("You are successfully logged in!");
-        }
+        //    Console.WriteLine("You are successfully logged in!");
+        //}
 
         public void GetAge()
         {
