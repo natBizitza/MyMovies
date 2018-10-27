@@ -57,13 +57,51 @@ namespace MyMovies
                         break;
                     case LOGIN:
                         LogIn();
+                        UserMenu();
                         break;
                     case EXIT:
                         Console.WriteLine("You are out of MyMovies. Thanks for visiting!");
                         break;
                 }
-            } while (option!=3);
+            } while (option!= EXIT);
         }
+
+        public static void UserMenu()
+        {
+            const int MYMOVIES = 1, ALLMOVIES = 2, RENTMOVIE = 3, LOGOUT=4;
+            int option;
+            Console.WriteLine("WELCOME to MyMovies");
+
+            do
+            {
+                // Menú principal
+                Console.WriteLine("Choose an option");
+                Console.WriteLine("1 - See the movies I am currently renting.");
+                Console.WriteLine("2 - Available for me movies.");
+                Console.WriteLine("3 - Rent a movie");
+                Console.WriteLine("4 - Log Out");
+
+                option = Convert.ToInt32(Console.ReadLine());
+
+                Console.WriteLine();
+                switch (option)
+                {
+                    //case MYMOVIES:
+                    //    ShowMyMovies();
+                    //    break;
+                    case ALLMOVIES:
+                        ShowAllMovies();
+                        break;
+                    //case RENTMOVIE:
+                    //    RentMovie();
+                    //    break;
+                    case LOGOUT:
+                        Console.WriteLine("You are back to the main menu.");
+                        break;
+                }
+            } while (option!=LOGOUT);
+        }
+
         public static void RegisterUser()
         {
             string username, name, password;
@@ -98,6 +136,7 @@ namespace MyMovies
             conexion.Close();
 
         }
+
         public static  void LogIn()
         {
             string username, password;
@@ -138,12 +177,60 @@ namespace MyMovies
 
                     registeredUser.Add(newUser);
 
-                    conexion.Close();
-                    registros.Close();
+                    //conexion.Close();
+                    //registros.Close();
                 }
+                conexion.Close();
+                registros.Close();
                 //check the boolean below
             } while (!IsRegistered);
+
             Console.WriteLine("You are successfully logged in!");
+        }
+
+        public static void ShowAllMovies()
+        {
+
+            SqlDataReader age;
+            int compareAge;
+            //string username;
+            conexion.Open();
+
+            //Console.WriteLine("Username:");
+            //username = Console.ReadLine();
+
+            //cadena = "SELECT DATEDIFF(year,DateBirth,GETDATE()) AS filter FROM CLIENT WHERE UserName LIKE '" + UserName + "'";
+            cadena = "SELECT DATEDIFF(year,DateBirth,GETDATE()) AS filter FROM CLIENT WHERE UserName LIKE 'Nat1994'";
+
+            comando = new SqlCommand(cadena, conexion);
+            age = comando.ExecuteReader();
+
+            age.Read();
+            //extracting from the query array the result from the column filter
+            compareAge = Convert.ToInt32(age["filter"].ToString());
+
+            conexion.Close();
+
+            SqlDataReader registros;
+
+            Console.WriteLine("Available Movies: ");
+            //Console.ReadLine();
+
+
+            conexion.Open();
+
+            cadena = "SELECT MovieName FROM MOVIE where AgeRestriction<= " + compareAge;
+            comando = new SqlCommand(cadena, conexion);
+            registros = comando.ExecuteReader();
+
+            // to show the available rooms
+            while (registros.Read())
+            {
+                Console.WriteLine(registros["MovieName"].ToString());
+                Console.WriteLine();
+            }
+            Console.ReadLine();
+            conexion.Close();
         }
     }
 }
