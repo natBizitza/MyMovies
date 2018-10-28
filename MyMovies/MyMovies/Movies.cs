@@ -15,57 +15,123 @@ namespace MyMovies
         static string cadena;
         static SqlCommand comando;
 
-        private string movie, name, rentals;
+        //private int idMovie, age;
+        private string movieName, director, country,synopsis, availab, idMovie, age;
+
+
+        //constructor
+        public Movies()
+        {
+
+        }
 
         //GEt & SEt
 
         public string GetName()
         {
-            return name;
+            return movieName;
         }
 
-    //    public void ShowAllMovies()
-    //    {
+        public void SetName(string movieName)
+        {
+            this.movieName = movieName;
+        }
 
-    //        SqlDataReader age;
-    //        int compareAge;
-    //        //string username;
-    //        conexion.Open();
+        public string GetDirector()
+        {
+            return director;
+        }
 
-    //        //Console.WriteLine("Username:");
-    //        //username = Console.ReadLine();
+        public void SetDirector(string director)
+        {
+            this.director = director;
+        }
 
-    //        cadena = "SELECT DATEDIFF(year,DateBirth,GETDATE()) AS filter FROM CLIENT WHERE UserName LIKE '" + UserName + "'";
-    //        comando = new SqlCommand(cadena, conexion);
-    //        age = comando.ExecuteReader();
+        public string GetCountry()
+        {
+            return country;
+        }
 
-    //        age.Read();
-    //        //extracting from the query array the result from the column filter
-    //        compareAge = Convert.ToInt32(age["filter"].ToString());
+        public void SetCountry(string country)
+        {
+            this.country = country;
+        }
 
-    //        conexion.Close();
+        public string GetSynopsis()
+        {
+            return synopsis;
+        }
 
-    //        SqlDataReader registros;
+        public void SetSynopsis(string synopsis)
+        {
+            this.synopsis = synopsis;
+        }
 
-    //        Console.WriteLine("Available Movies: ");
-    //        //Console.ReadLine();
+        public string GetAvailab()
+        {
+            return availab;
+        }
 
+        public void SetAvailab(string availab)
+        {
+            this.availab = availab;
+        }
 
-    //        conexion.Open();
-            
-    //        cadena = "SELECT MovieName FROM MOVIE where AgeRestriction<= " + compareAge;
-    //        comando = new SqlCommand(cadena, conexion);
-    //        registros = comando.ExecuteReader();
+        public string GetIdMovie()
+        {
+            return idMovie;
+        }
 
-    //        // to show the available rooms
-    //        while (registros.Read())
-    //        {
-    //            Console.WriteLine(registros["MovieName"].ToString());
-    //            Console.WriteLine();
-    //        }
-    //        Console.ReadLine();
-    //        conexion.Close();
-    //    }
+        public void SetIdMovie(string idMovie)
+        {
+            this.idMovie = idMovie;
+        }
 
+        public string GetAge()
+        {
+            return age;
+        }
+
+        public void SetAge(string age)
+        {
+            this.age = age;
+        }
+
+        //other methods
+
+        public override string MostrarDatos()
+        {
+            string result = "";
+
+            if (this.GetIdMovie() != "")
+            {
+                result += "ID: " + this.GetIdMovie() + " ";
+            }
+            if (this.GetName() != "")
+            {
+                result += "Name: " + this.GetName() + " ";
+            }
+            if (this.GetDirector() != "")
+            {
+                result += "Director: " + this.GetDirector() + " ";
+            }
+            if (this.GetName() != "")
+            {
+                result += "Name: " + this.GetName() + " ";
+            }
+            if (this.GetName() != "")
+            {
+                result += "Name: " + this.GetName() + " ";
+            }
+            if (this.GetName() != "")
+            {
+                result += "Name: " + this.GetName() + " ";
+            }
+            if (this.GetName() != "")
+            {
+                result += "Name: " + this.GetName() + " ";
+            }
+            return "FUTBOLISTA " + base.MostrarDatos() + result;
+            }
+        }
     }
-}

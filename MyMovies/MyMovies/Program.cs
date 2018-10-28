@@ -239,8 +239,7 @@ namespace MyMovies
             comando = new SqlCommand(cadena, conexion);
             registros = comando.ExecuteReader();
 
-            //TODO:MOVe IT OUT OF HERE, cause otherwise you can´trent a movie directly usinf the list allmovesFor User
-            // to show the available rooms
+            //TODO:MOVe IT OUT OF HERE, cause otherwise you can´trent a movie directly using the list allmovesFor User
             while (registros.Read())
             {
                 Console.WriteLine("ID: "+registros["IdMovie"].ToString());
@@ -253,9 +252,19 @@ namespace MyMovies
 
                 movie = new Movies();
 
-                allMoviesForUser = new List<Movies>();
-                //TODO: below list
-                allMoviesForUser.Add(movie);
+                movie.SetIdMovie(registros["IdMovie"].ToString());
+                movie.SetName(registros["MovieName"].ToString());
+                movie.SetDirector(registros["Director"].ToString());
+                movie.SetCountry(registros["CountryOfOrigin"].ToString());
+                movie.SetSynopsis(registros["Synopsis"].ToString());
+                movie.SetAge(registros["AgeRestriction"].ToString());
+                movie.SetAvailab(registros["Availability"].ToString());
+
+                //adding all movies for this user in one list
+                allMoviesForUser = new List<Movies>()
+                {
+                    movie
+                };
 
                 Console.WriteLine();
             }
