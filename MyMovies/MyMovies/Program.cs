@@ -14,10 +14,12 @@ namespace MyMovies
         static SqlConnection conexion = new SqlConnection(connectionString);
         static string cadena;
         static SqlCommand comando;
-        static List<User> registeredUser;
+        //static List<User> registeredUser;
         static List<Movies> allMoviesForUser;
+        static List<Rents> rentsOfUser;
         static private User user;
         static private Movies movie;
+        static private Rents rentedMovie;
 
 
         //static private string username, name, password;
@@ -134,7 +136,7 @@ namespace MyMovies
 
             conexion.Open();
 
-            cadena = "INSERT INTO CLIENT VALUES ('" + username + "','" + name + "','" + dateOfBirth + "','" + password + "')";
+            cadena = "INSERT INTO CLIENT VALUES ('" + username + "','" + movie + "','" + dateOfBirth + "','" + password + "')";
             comando = new SqlCommand(cadena, conexion);
             comando.ExecuteNonQuery();
 
@@ -312,6 +314,9 @@ namespace MyMovies
             //}
             Console.ReadLine();
 
+            //list for all rents of the User
+            rentsOfUser = new List<Rents>();
+
             do
             {
                 Console.WriteLine("Choose a movie from the list above: ");
@@ -336,11 +341,23 @@ namespace MyMovies
 
                         conexion.Close();
 
+
                         //Update table RENTS
                         conexion.Open();
-                        cadena = "INSERT INTO RENTS (IdRent, UserName, IdMovie, RentDeadline) VALUES ('" + movie.GetIdMovie() + "','" + DNI + "','" + roomNum + "','" + thisDay + "')";
+                        comando = new SqlCommand(cadena, conexion);
+                        SqlDataReader registros = comando.ExecuteReader();
+
+                        rentedMovie = new Rents();
+
+                        cadena = "INSERT INTO RENTS (UserName, IdMovie, RentDeadline) VALUES ('" + user.GetName() + "','" + movie.GetIdMovie() + "','" + rentedMovie.GetDeadline() + "')";
                         comando = new SqlCommand(cadena, conexion);
                         comando.ExecuteNonQuery();
+
+                        rentedMovie.SetIdRent(registros["IdRent"].ToString());
+                        rentedMovie.SetName(registros["UserName"].ToString());
+                        rentedMovie.SetIdRent(registros["IdRent"].ToString());
+                        rentedMovie.SetDeadline(registros["RentDeadline"].ToString());
+
 
                         conexion.Close();
                     }
