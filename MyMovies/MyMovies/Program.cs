@@ -260,9 +260,9 @@ namespace MyMovies
                 movie.SetAge(registros["AgeRestriction"].ToString());
                 movie.SetAvailab(registros["Availability"].ToString());
 
-                //adding all movies for this user in one list
+                //creating a list where we keep all the movies for this user
                 allMoviesForUser = new List<Movies>();
-
+                //adding all movies for this user in one list
                 allMoviesForUser.Add(movie);
                 //foreach (Movies movie in allMoviesForUser)
                 //{
