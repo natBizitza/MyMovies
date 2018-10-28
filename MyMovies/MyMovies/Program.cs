@@ -74,7 +74,7 @@ namespace MyMovies
 
         public static void UserMenu()
         {
-            const int MYMOVIES = 1, ALLMOVIES = 2, RENTMOVIE = 3, LOGOUT=4;
+            const int MYMOVIES = 1, ALLMOVIES = 2, RENTMOVIE = 3, LOGOUT = 4;
             int option;
             Console.WriteLine("WELCOME to MyMovies");
 
@@ -97,6 +97,7 @@ namespace MyMovies
                     //    break;
                     case ALLMOVIES:
                         ShowAllMovies();
+                        //RentMovie();
                         break;
                     case RENTMOVIE:
                         RentMovie();
@@ -239,6 +240,7 @@ namespace MyMovies
             comando = new SqlCommand(cadena, conexion);
             registros = comando.ExecuteReader();
 
+            allMoviesForUser = new List<Movies>();
             //TODO:MOVe IT OUT OF HERE, cause otherwise you can´trent a movie directly using the list allmovesFor User
             while (registros.Read())
             {
@@ -261,7 +263,7 @@ namespace MyMovies
                 movie.SetAvailab(registros["Availability"].ToString());
 
                 //creating a list where we keep all the movies for this user
-                allMoviesForUser = new List<Movies>();
+               
                 //adding all movies for this user in one list
                 allMoviesForUser.Add(movie);
                 //foreach (Movies movie in allMoviesForUser)
@@ -279,11 +281,11 @@ namespace MyMovies
                 //}
                 //Console.WriteLine();
             }
-            foreach (Movies movie in allMoviesForUser)
-            {
-                //allMoviesForUser.Add(movie);
-                Console.WriteLine(movie.MostrarDatos());
-            }
+            //foreach (Movies movie in allMoviesForUser)
+            //{
+            //    //allMoviesForUser.Add(movie);
+            //    Console.WriteLine(movie.MostrarDatos());
+            //}
             Console.ReadLine();
             conexion.Close();
         }
@@ -293,49 +295,64 @@ namespace MyMovies
             string movieChoice;
             bool isExisted;
 
-            Console.WriteLine("************ YOU ARE ABOUT TO HAVE IT ***************");
+            Console.WriteLine("************ YOU ARE ABOUT TO HAVE IT ***************\n");
 
-            foreach  (Movies movie in allMoviesForUser)
+            foreach (Movies movie in allMoviesForUser)
             {
-                Console.WriteLine(movie.MostrarDatos());
+                //check later if it works
+                if (movie.GetAvailab().Contains("A"))
+                    Console.WriteLine(movie.MostrarDatos() + "\n");
             }
 
-            Console.ReadLine();
-            //foreach (Movies movie in allMoviesForUser)
+            //foreach (Object obj in Objects)
             //{
-            //    Console.WriteLine(movie.GetName());
-            //    break;
-            //}
-
-            //do
-            //{
-            //    Console.WriteLine("Type a name of a movie you would like to watch.");
-            //    movieChoice = Console.ReadLine();
-
-            //    conexion.Open();
-            //    cadena = "SELECT * from MOVIE where MovieName LIKE '" + movieChoice + "' and Availablity LIKE 'A' ";
-            //    comando = new SqlCommand(cadena, conexion);
-            //    SqlDataReader registros = comando.ExecuteReader();
-            //    isExisted = registros.Read();
-            //    if (!isExisted)
-            //    {
-
-            //        Console.WriteLine("This movie is unavailable or unfortunately doesn't exist in MyMovies yet.");
+            //    if (obj.description.Contains("test"){
+            //        //Object description contains "test"
             //    }
-            //    else
-            //    {
+            //}
+            Console.ReadLine();
 
-            //        user = new User();
-            //        user.SetUsername(registros["UserName"].ToString());
-            //        user.SetName(registros["Name"].ToString());
-            //        user.SetDateBirth(registros["DateBirth"].ToString());
-            //        user.SetPassword(registros["Password"].ToString());
+            do
+            {
+                Console.WriteLine("Choose a movie from the list above: ");
+                movieChoice = Console.ReadLine();
 
-            //        //registeredUser.Add(user);
+                //conexion.Open();
+                //cadena = "SELECT * from MOVIE where MovieName LIKE '" + movieChoice + "' and Availablity LIKE 'A' ";
+                //comando = new SqlCommand(cadena, conexion);
+                //SqlDataReader registros = comando.ExecuteReader();
+                //isExisted = registros.Read();
 
+                foreach (Movies movie in allMoviesForUser)
+                {
+                    if (movie.GetName().Contains(movieChoice))
+                    {
+                        //update table MOVIE, change availability to N
+                        conexion.Open();
 
-            //    } while() ;
-            
-        }
+                        cadena = "UPDATE MOVIE SET Availability = 'N' where MovieName= '" + movieChoice + "'";
+                        comando = new SqlCommand(cadena, conexion);
+                        comando.ExecuteNonQuery();
+
+                        conexion.Close();
+
+                        //Update table RENTS
+                        conexion.Open();
+                        cadena = "INSERT INTO RENTS (IdRent, UserName, IdMovie, RentDeadline) VALUES ('" + movie.GetIdMovie() + "','" + DNI + "','" + roomNum + "','" + thisDay + "')";
+                        comando = new SqlCommand(cadena, conexion);
+                        comando.ExecuteNonQuery();
+
+                        conexion.Close();
+                    }
+                    else
+                    {
+                        Console.WriteLine("This movie is unavailable or unfortunately doesn't exist in MyMovies yet.");
+               
+                    }
+                }
+
+                } while () ;
+            }
+        }   
     }
 }
