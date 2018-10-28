@@ -294,16 +294,77 @@ namespace MyMovies
 
         public static void RentMovie()
         {
-            string movieChoice;
-            bool isExisted;
+            string movieChoice, answer = "", idRent;
+            //bool isExisted;
 
             Console.WriteLine("************ YOU ARE ABOUT TO HAVE IT ***************\n");
 
+            // to show all movies with availab "A"
             foreach (Movies movie in allMoviesForUser)
             {
                 //check later if it works
                 if (movie.GetAvailab().Contains("A"))
+                {
                     Console.WriteLine(movie.MostrarDatos() + "\n");
+
+                }
+            }
+
+            rentsOfUser = new List<Rents>();
+            //if (movie.GetAvailab().Contains("A"))
+            //{
+            do{
+                Console.WriteLine("Choose a movie ID from the list above (ID): ");
+                movieChoice = Console.ReadLine();
+
+                if (movie.GetIdMovie() == movieChoice)
+                {
+                    //update table MOVIE, change availability to N
+                    conexion.Open();
+
+                    cadena = "UPDATE MOVIE SET Availability = 'N' where IdMovie= '" + movieChoice + "'";
+                    comando = new SqlCommand(cadena, conexion);
+                    comando.ExecuteNonQuery();
+
+                    conexion.Close();
+
+
+                    //Update table RENTS
+                    conexion.Open();
+
+                    rentedMovie = new Rents();
+
+                    idRent = movie.GetIdMovie();
+                    cadena = "INSERT INTO RENTS VALUES ('" + idRent + "','" + user.GetUsername() + "','" + movie.GetIdMovie() + "','" + rentedMovie.GetDeadline() + "')";
+                    comando = new SqlCommand(cadena, conexion);
+                    SqlDataReader registros = comando.ExecuteReader();
+
+                    rentedMovie.SetIdRent(registros["IdRent"].ToString());
+                    rentedMovie.SetName(registros["UserName"].ToString());
+                    rentedMovie.SetIdRent(registros["IdRent"].ToString());
+                    rentedMovie.SetDeadline(DateTime.Parse(registros["RentDeadline"].ToString()));
+
+                    rentsOfUser.Add(rentedMovie);
+
+                    Console.WriteLine("You are ready to watch " + movie.GetName() + " Your rent expires in 10 days. Enjoy!");
+                    conexion.Close();
+                }
+                if (movie.GetIdMovie() != movieChoice)
+                {
+                    Console.WriteLine("This movie is unavailable or unfortunately doesn't exist in MyMovies yet.");
+
+                }
+                Console.WriteLine("Would you like to rent another movie? (S/N");
+                answer = Console.ReadLine();
+
+            } while (answer.ToUpper() != "N");
+            Console.WriteLine("/nThanks for your order!");
+                //}
+                //else
+                //{
+                //    Console.WriteLine("We are sorry, currently MyMovies does not have any movies available for you.");
+                //}
+
             }
 
             //foreach (Object obj in Objects)
@@ -312,64 +373,65 @@ namespace MyMovies
             //        //Object description contains "test"
             //    }
             //}
-            Console.ReadLine();
+            //Console.ReadLine();
 
             //list for all rents of the User
-            rentsOfUser = new List<Rents>();
+            //rentsOfUser = new List<Rents>();
 
-            do
-            {
-                Console.WriteLine("Choose a movie from the list above: ");
-                movieChoice = Console.ReadLine();
+            // to see if there is any available movie to rent
+            //if (movie.GetAvailab().Contains("A"))
+            //{
+            //    do
+            //    {
+            //        Console.WriteLine("Choose a movie ID from the list above (ID): ");
+            //        movieChoice = Console.ReadLine();
 
-                //conexion.Open();
-                //cadena = "SELECT * from MOVIE where MovieName LIKE '" + movieChoice + "' and Availablity LIKE 'A' ";
-                //comando = new SqlCommand(cadena, conexion);
-                //SqlDataReader registros = comando.ExecuteReader();
-                //isExisted = registros.Read();
+            //        if (movie.GetIdMovie() == movieChoice)
+            //        {
+            //            //update table MOVIE, change availability to N
+            //            conexion.Open();
 
-                foreach (Movies movie in allMoviesForUser)
-                {
-                    if (movie.GetName().Contains(movieChoice))
-                    {
-                        //update table MOVIE, change availability to N
-                        conexion.Open();
+            //            cadena = "UPDATE MOVIE SET Availability = 'N' where IdMovie= '" + movieChoice + "'";
+            //            comando = new SqlCommand(cadena, conexion);
+            //            comando.ExecuteNonQuery();
 
-                        cadena = "UPDATE MOVIE SET Availability = 'N' where MovieName= '" + movieChoice + "'";
-                        comando = new SqlCommand(cadena, conexion);
-                        comando.ExecuteNonQuery();
-
-                        conexion.Close();
+            //            conexion.Close();
 
 
-                        //Update table RENTS
-                        conexion.Open();
-                        comando = new SqlCommand(cadena, conexion);
-                        SqlDataReader registros = comando.ExecuteReader();
+            //            //Update table RENTS
+            //            conexion.Open();
 
-                        rentedMovie = new Rents();
+            //            rentedMovie = new Rents();
 
-                        cadena = "INSERT INTO RENTS (UserName, IdMovie, RentDeadline) VALUES ('" + user.GetName() + "','" + movie.GetIdMovie() + "','" + rentedMovie.GetDeadline() + "')";
-                        comando = new SqlCommand(cadena, conexion);
-                        comando.ExecuteNonQuery();
+            //            cadena = "INSERT INTO RENTS VALUES ('" + user.GetName() + "','" + movie.GetIdMovie() + "','" + rentedMovie.GetDeadline() + "')";
+            //            comando = new SqlCommand(cadena, conexion);
+            //            SqlDataReader registros = comando.ExecuteReader();
 
-                        rentedMovie.SetIdRent(registros["IdRent"].ToString());
-                        rentedMovie.SetName(registros["UserName"].ToString());
-                        rentedMovie.SetIdRent(registros["IdRent"].ToString());
-                        rentedMovie.SetDeadline(registros["RentDeadline"].ToString());
+            //            //rentedMovie.SetIdRent(registros["IdRent"].ToString());
+            //            rentedMovie.SetName(registros["UserName"].ToString());
+            //            rentedMovie.SetIdRent(registros["IdRent"].ToString());
+            //            rentedMovie.SetDeadline(DateTime.Parse(registros["RentDeadline"].ToString()));
 
+            //            rentsOfUser.Add(rentedMovie);
 
-                        conexion.Close();
-                    }
-                    else
-                    {
-                        Console.WriteLine("This movie is unavailable or unfortunately doesn't exist in MyMovies yet.");
-               
-                    }
-                }
+            //            Console.WriteLine("You are ready to watch " + movie.GetName() + " Your rent expires in 10 days. Enjoy!");
+            //            conexion.Close();
+            //        }
+            //        if (movie.GetIdMovie() != movieChoice)
+            //        {
+            //            Console.WriteLine("This movie is unavailable or unfortunately doesn't exist in MyMovies yet.");
 
-                } while () ;
-            }
-        }   
+            //        }
+            //        Console.WriteLine("Would you like to rent another movie? (S/N");
+            //        answer = Console.ReadLine();
+
+            //    } while (answer.ToUpper() != "N");
+            //    Console.WriteLine("/nThanks for your order!");
+            //} else
+            //{
+            //    Console.WriteLine("We are sorry, currently MyMovies does not have any movies available for you.");
+            //}
+           
+         
     }
 }
