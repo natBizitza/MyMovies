@@ -261,12 +261,28 @@ namespace MyMovies
                 movie.SetAvailab(registros["Availability"].ToString());
 
                 //adding all movies for this user in one list
-                allMoviesForUser = new List<Movies>()
-                {
-                    movie
-                };
+                allMoviesForUser = new List<Movies>();
 
-                Console.WriteLine();
+                allMoviesForUser.Add(movie);
+                //foreach (Movies movie in allMoviesForUser)
+                //{
+                //    allMoviesForUser.Add(movie);
+                //    Console.WriteLine(movie.MostrarDatos());
+                //}
+
+
+                ////allMoviesForUser.MostrarDatos(movie);
+                //foreach (Movies movie in allMoviesForUser)
+                //{
+                //    Console.WriteLine("*****Checking the list******");
+                //    Console.WriteLine(movie.MostrarDatos());
+                //}
+                //Console.WriteLine();
+            }
+            foreach (Movies movie in allMoviesForUser)
+            {
+                //allMoviesForUser.Add(movie);
+                Console.WriteLine(movie.MostrarDatos());
             }
             Console.ReadLine();
             conexion.Close();
@@ -281,8 +297,7 @@ namespace MyMovies
 
             foreach  (Movies movie in allMoviesForUser)
             {
-                Console.WriteLine(movie.GetType().Name);
-                Console.WriteLine(movie.ToString());
+                Console.WriteLine(movie.MostrarDatos());
             }
 
             Console.ReadLine();

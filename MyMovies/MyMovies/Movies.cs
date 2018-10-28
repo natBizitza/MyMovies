@@ -15,12 +15,24 @@ namespace MyMovies
         static string cadena;
         static SqlCommand comando;
 
+        //static List<Movies> allMoviesForUser;
         //private int idMovie, age;
         private string movieName, director, country,synopsis, availab, idMovie, age;
 
 
         //constructor
-        public Movies()
+        public Movies(string idMovie, string movieName, string director, string country, string synopsis, string availab, string age)
+        {
+            this.idMovie = idMovie;
+            this.movieName = movieName;
+            this.director = director;
+            this.country = country;
+            this.synopsis = synopsis;
+            this.availab = availab;
+            this.age = age;
+        }
+
+        public Movies ()
         {
 
         }
@@ -99,7 +111,7 @@ namespace MyMovies
 
         //other methods
 
-        public override string MostrarDatos()
+        public string MostrarDatos()
         {
             string result = "";
 
@@ -115,23 +127,19 @@ namespace MyMovies
             {
                 result += "Director: " + this.GetDirector() + " ";
             }
-            if (this.GetName() != "")
+            if (this.GetSynopsis() != "")
             {
-                result += "Name: " + this.GetName() + " ";
+                result += "Synopsis: " + this.GetSynopsis() + " ";
             }
-            if (this.GetName() != "")
+            if (this.GetAge() != "")
             {
-                result += "Name: " + this.GetName() + " ";
+                result += "Age: " + this.GetAge() + " ";
             }
-            if (this.GetName() != "")
+            if (this.GetAvailab() != "")
             {
-                result += "Name: " + this.GetName() + " ";
+                result += "Availablity (A/N): " + this.GetAvailab() + " ";
             }
-            if (this.GetName() != "")
-            {
-                result += "Name: " + this.GetName() + " ";
-            }
-            return "FUTBOLISTA " + base.MostrarDatos() + result;
+            return  result;
             }
         }
     }
