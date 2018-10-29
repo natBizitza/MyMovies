@@ -14,6 +14,7 @@ namespace MyMovies
         static SqlConnection conexion = new SqlConnection(connectionString);
         static string cadena;
         static SqlCommand comando;
+        static List<User> registeredUser;
         static List<Movies> allMoviesForUser;
         static List<Rents> rentsOfUser;
         static List<Movies> myMovies;
@@ -111,12 +112,6 @@ namespace MyMovies
             name = Console.ReadLine();
             Console.WriteLine("Enter your date of birth (dd/MM/YYYY): ");
             dateOfBirth = Console.ReadLine();
-            //Console.WriteLine("Enter your month of birth (MM): ");
-            //month = Console.ReadLine();
-            //Console.WriteLine("Enter your year of birth (yyyy): ");
-            //year = Console.ReadLine();
-            //string yourDateOfBirth = day + "/" + month + "/" + year;
-            //Console.WriteLine("Your date of birth is " + yourDateOfBirth);
             Console.WriteLine("Enter your password: ");
             password = Console.ReadLine();
 
@@ -140,7 +135,7 @@ namespace MyMovies
 
             bool IsRegistered = false;
 
-            //List<User> registeredUser = new List<User>();
+            registeredUser = new List<User>();
 
             Console.WriteLine("**************** LOG IN **********************");
             do
@@ -151,7 +146,7 @@ namespace MyMovies
                 Console.WriteLine("Password: ");
                 password = Console.ReadLine();
 
-                //TODO: add condition if password==pasword and username==username -> user menu
+                //to check if the username and password are correct
                 conexion.Open();
                 cadena = "SELECT * from CLIENT where UserName LIKE '" + username + "' and Password LIKE '" + password + "'"; 
                 comando = new SqlCommand(cadena, conexion);
@@ -164,34 +159,21 @@ namespace MyMovies
                 }
                 else
                 {
-
+                    //create new object
                     user = new User();
                     user.SetUsername(registros["UserName"].ToString());
                     user.SetName(registros["Name"].ToString());
                     user.SetDateBirth(registros["DateBirth"].ToString());
                     user.SetPassword(registros["Password"].ToString());
 
-                    //registeredUser.Add(user);
-
-                    // to test the list of registereduser
-
-                    //foreach (User person in registeredUser)
-                    //{
-                    //    Console.WriteLine(person.GetType().Name.ToUpper());
-                    //    break;
-                    //}
-
-                    //conexion.Close();
-                    //registros.Close();
+                    //no idea  if it's necessary yet
+                    registeredUser.Add(user);
                 }
                 conexion.Close();
                 registros.Close();
-                //check the boolean below
             } while (!IsRegistered);
 
             Console.WriteLine("You are successfully logged in!");
-
-                //ShowAllMovies();
         }
 
         public static void ShowAllMovies()
@@ -311,7 +293,7 @@ namespace MyMovies
                     conexion.Close();
                 };
                 myMovies.Add(movie);
-                Console.WriteLine("You are ready to watch " + movie.GetName() + " Your rent expires in 10 days. Enjoy!");
+                Console.WriteLine("You are ready to watch " + movie.GetName() + " Your rent expires in 10 days. Enjoy!\n");
                 Console.ReadLine();
 
                 Console.WriteLine("Would you like to rent another movie? (S/N)");
@@ -327,6 +309,7 @@ namespace MyMovies
             SqlDataReader registros;
             conexion.Open();
 
+            //joining two tables(RENTS & MOVIE)  
             cadena = "SELECT [IdRent],r.IdMovie, UserName, MovieName,[RentDeadline] FROM RENTS r, [MOVIE]c WHERE r.IdMovie=c.IdMovie and UserName Like '" + user.GetUsername() + "'";
             comando = new SqlCommand(cadena, conexion);
             registros = comando.ExecuteReader();
