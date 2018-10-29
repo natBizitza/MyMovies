@@ -10,17 +10,10 @@ namespace MyMovies
 {
     class Movies
     {
-        static String connectionString = ConfigurationManager.ConnectionStrings["MOVIES"].ConnectionString;
-        static SqlConnection conexion = new SqlConnection(connectionString);
-        static string cadena;
-        static SqlCommand comando;
-
-        //static List<Movies> allMoviesForUser;
-        //private int idMovie, age;
         private string movieName, director, country,synopsis, availab, idMovie, age;
 
 
-        //constructor
+        //constructors
         public Movies(string idMovie, string movieName, string director, string country, string synopsis, string availab, string age)
         {
             this.idMovie = idMovie;

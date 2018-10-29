@@ -14,7 +14,6 @@ namespace MyMovies
         static SqlConnection conexion = new SqlConnection(connectionString);
         static string cadena;
         static SqlCommand comando;
-        //static List<User> registeredUser;
         static List<Movies> allMoviesForUser;
         static List<Rents> rentsOfUser;
         static List<Movies> myMovies;
@@ -23,25 +22,13 @@ namespace MyMovies
         static private Rents rentedMovie;
 
 
-        //static private string username, name, password;
-
         static void Main(string[] args)
         {
-            //List<User> registeredUser = new List<User>();
-            ////const int REGISTER = 1, LOGIN = 2, EXIT = 3;
-
-            //User newUser = new User();
-            //Movies newMovie = new Movies();
-
-
-            ////newUser1.RegisterUser();
-            //newUser1.LogIn();
-            ////newMovie.ShowAllMovies();
-
             Menu();
 
             Console.ReadLine();
         }
+
         public static void Menu()
         {
 
@@ -214,11 +201,7 @@ namespace MyMovies
             //string username;
             conexion.Open();
 
-            //Console.WriteLine("Username:");
-            //username = Console.ReadLine();
-
             cadena = "SELECT DATEDIFF(year,DateBirth,GETDATE()) AS filter FROM CLIENT WHERE UserName LIKE '" + user.GetUsername() + "'";
-            //cadena = "SELECT DATEDIFF(year,DateBirth,GETDATE()) AS filter FROM CLIENT WHERE UserName LIKE 'Nat1994'";
 
             comando = new SqlCommand(cadena, conexion);
             age = comando.ExecuteReader();
@@ -227,15 +210,12 @@ namespace MyMovies
             // extracting from the query array the result from the column filter
             compareAge = Convert.ToInt32(age["filter"].ToString());
 
-
-
             conexion.Close();
 
             SqlDataReader registros;
 
             Console.WriteLine("Available Movies: ");
             Console.ReadLine();
-
 
             conexion.Open();
 
@@ -265,30 +245,9 @@ namespace MyMovies
                 movie.SetAge(registros["AgeRestriction"].ToString());
                 movie.SetAvailab(registros["Availability"].ToString());
 
-                //creating a list where we keep all the movies for this user
-               
                 //adding all movies for this user in one list
                 allMoviesForUser.Add(movie);
-                //foreach (Movies movie in allMoviesForUser)
-                //{
-                //    allMoviesForUser.Add(movie);
-                //    Console.WriteLine(movie.MostrarDatos());
-                //}
-
-
-                ////allMoviesForUser.MostrarDatos(movie);
-                //foreach (Movies movie in allMoviesForUser)
-                //{
-                //    Console.WriteLine("*****Checking the list******");
-                //    Console.WriteLine(movie.MostrarDatos());
-                //}
-                //Console.WriteLine();
             }
-            //foreach (Movies movie in allMoviesForUser)
-            //{
-            //    //allMoviesForUser.Add(movie);
-            //    Console.WriteLine(movie.MostrarDatos());
-            //}
             Console.ReadLine();
             conexion.Close();
         }
@@ -302,10 +261,9 @@ namespace MyMovies
 
             Console.WriteLine("************ YOU ARE ABOUT TO HAVE IT ***************\n");
 
-            // to show all movies with availab "A"
+            // to show all movies with availab= "A"
             foreach (Movies movie in allMoviesForUser)
             {
-                //check later if it works
                 if (movie.GetAvailab().Contains("A"))
                 {
                     Console.WriteLine(movie.MostrarDatos() + "\n");
@@ -332,10 +290,12 @@ namespace MyMovies
                     //Update table RENTS
                     conexion.Open();
 
+                    //idRent will have the same number like the ID of movieChoice
                     idRent = movieChoice;
                     rentedMovie = new Rents();
 
                     idRent = movie.GetIdMovie();
+
                     cadena = "INSERT INTO RENTS VALUES ('" + idRent + "','" + user.GetUsername() + "','" + movie.GetIdMovie() + "','" + rentedMovie.GetDeadline() + "')";
                     comando = new SqlCommand(cadena, conexion);
                     SqlDataReader registros = comando.ExecuteReader();
@@ -349,8 +309,6 @@ namespace MyMovies
                     //myMovies.Add(movie);
 
                     conexion.Close();
-                    //Console.WriteLine("You are ready to watch " + movie.GetName() + " Your rent expires in 10 days. Enjoy!");
-                    //Console.ReadLine();
                 };
                 myMovies.Add(movie);
                 Console.WriteLine("You are ready to watch " + movie.GetName() + " Your rent expires in 10 days. Enjoy!");
@@ -362,6 +320,7 @@ namespace MyMovies
             } while (answer.ToUpper() != "N") ;
                 Console.WriteLine("Thanks for your order!");
         }
+
         public static void MyRents()
         {
             DateTime thisDay = DateTime.Now;
@@ -372,7 +331,7 @@ namespace MyMovies
             comando = new SqlCommand(cadena, conexion);
             registros = comando.ExecuteReader();
 
-            // to show the available rooms
+            // to show my rents
             while (registros.Read())
             {
                 Console.WriteLine("Rent ID: " + registros["IdRent"].ToString());
@@ -394,13 +353,7 @@ namespace MyMovies
                 }
                 Console.WriteLine();
             }
-            //Console.ReadLine();
             conexion.Close();
-
-            //foreach (Rents movie in rentsOfUser)
-            //{
-            //    Console.WriteLine(movie.GetIdMovie());
-            //}
         }
 
     }

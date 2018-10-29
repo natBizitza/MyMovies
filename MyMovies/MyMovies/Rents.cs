@@ -9,7 +9,7 @@ namespace MyMovies
     class Rents
     {
         private string idRent, userName, idMovie;
-        private DateTime thisDay, rentDeadline;
+        private DateTime rentDeadline;
 
 
         //constructor
@@ -30,6 +30,7 @@ namespace MyMovies
             this.idRent = idRent;
         }
 
+        //deadline for any rent is in 10 days
         public DateTime GetDeadline()
         {
             DateTime thisDay = DateTime.Now;
@@ -63,9 +64,5 @@ namespace MyMovies
         {
             this.idMovie = idMovie;
         }
-
-        //methods
-
-
     }
 }
