@@ -64,5 +64,8 @@ namespace MyMovies
             this.idMovie = idMovie;
         }
 
+        //methods
+
+
     }
 }

@@ -17,6 +17,7 @@ namespace MyMovies
         //static List<User> registeredUser;
         static List<Movies> allMoviesForUser;
         static List<Rents> rentsOfUser;
+        static List<Movies> myMovies;
         static private User user;
         static private Movies movie;
         static private Rents rentedMovie;
@@ -52,7 +53,7 @@ namespace MyMovies
             {
                 // Menú principal
                 Console.WriteLine("Choose an option");
-                Console.WriteLine("1- Register as a MymMovies user");
+                Console.WriteLine("1- Register as a MyMovies user");
                 Console.WriteLine("2- Log In");
                 Console.WriteLine("3- Exit Menu");
                 option = Convert.ToInt32(Console.ReadLine());
@@ -94,9 +95,9 @@ namespace MyMovies
                 Console.WriteLine();
                 switch (option)
                 {
-                    //case MYMOVIES:
-                    //    ShowMyMovies();
-                    //    break;
+                    case MYMOVIES:
+                        MyRents();
+                        break;
                     case ALLMOVIES:
                         ShowAllMovies();
                         //RentMovie();
@@ -295,7 +296,9 @@ namespace MyMovies
         public static void RentMovie()
         {
             string movieChoice, answer = "", idRent;
-            //bool isExisted;
+            //the list with rents of the user
+            rentsOfUser = new List<Rents>();
+            myMovies = new List<Movies>();
 
             Console.WriteLine("************ YOU ARE ABOUT TO HAVE IT ***************\n");
 
@@ -307,13 +310,15 @@ namespace MyMovies
                 {
                     Console.WriteLine(movie.MostrarDatos() + "\n");
 
+                   
+
                 }
             }
 
-            rentsOfUser = new List<Rents>();
-            //if (movie.GetAvailab().Contains("A"))
-            //{
-            do{
+            
+
+            do
+            {
                 Console.WriteLine("Choose a movie ID from the list above (ID): ");
                 movieChoice = Console.ReadLine();
 
@@ -332,6 +337,7 @@ namespace MyMovies
                     //Update table RENTS
                     conexion.Open();
 
+                    idRent = movie.GetIdMovie();
                     rentedMovie = new Rents();
 
                     idRent = movie.GetIdMovie();
@@ -345,93 +351,59 @@ namespace MyMovies
                     rentedMovie.SetDeadline(DateTime.Parse(registros["RentDeadline"].ToString()));
 
                     rentsOfUser.Add(rentedMovie);
+                    myMovies.Add(movie);
 
                     Console.WriteLine("You are ready to watch " + movie.GetName() + " Your rent expires in 10 days. Enjoy!");
-                    conexion.Close();
-                }
-                if (movie.GetIdMovie() != movieChoice)
-                {
-                    Console.WriteLine("This movie is unavailable or unfortunately doesn't exist in MyMovies yet.");
+                    Console.ReadLine();
+                };
 
-                }
                 Console.WriteLine("Would you like to rent another movie? (S/N");
                 answer = Console.ReadLine();
+               
 
-            } while (answer.ToUpper() != "N");
-            Console.WriteLine("/nThanks for your order!");
-                //}
-                //else
-                //{
-                //    Console.WriteLine("We are sorry, currently MyMovies does not have any movies available for you.");
-                //}
+            } while (answer.ToUpper() != "N") ;
+                Console.WriteLine("/nThanks for your order!");
+        }
+        public static void MyRents()
+        {
+            DateTime thisDay = DateTime.Now;
+            SqlDataReader registros;
+            conexion.Open();
 
+            cadena = "SELECT [IdRent],r.IdMovie, UserName, MovieName,[RentDeadline] FROM RENTS r, [MOVIE]c WHERE r.IdMovie=c.IdMovie and UserName Like '" + user.GetUsername() + "'";
+            comando = new SqlCommand(cadena, conexion);
+            registros = comando.ExecuteReader();
+
+            // to show the available rooms
+            while (registros.Read())
+            {
+                Console.WriteLine("Rent ID: " + registros["IdRent"].ToString());
+                Console.WriteLine("Movie ID: " + registros["IdMovie"].ToString());
+                Console.WriteLine("Username: " + registros["UserName"].ToString());
+                Console.WriteLine("Movie: " + registros["MovieName"].ToString());
+
+                if (registros["RentDeadline"].ToString() == thisDay.ToString("yyyy-MM-dd"))
+                {
+                    Console.BackgroundColor = ConsoleColor.Red;
+                    Console.WriteLine(registros["RentDeadline"].ToString());
+                    Console.ResetColor();
+
+                    Console.WriteLine("Your rent is expired. See you soon!");
+                }
+                else
+                {
+                    Console.WriteLine(registros["RentDeadline"].ToString());
+                }
+                Console.WriteLine();
             }
-
-            //foreach (Object obj in Objects)
-            //{
-            //    if (obj.description.Contains("test"){
-            //        //Object description contains "test"
-            //    }
-            //}
             //Console.ReadLine();
+            conexion.Close();
 
-            //list for all rents of the User
-            //rentsOfUser = new List<Rents>();
-
-            // to see if there is any available movie to rent
-            //if (movie.GetAvailab().Contains("A"))
+            //foreach (Rents movie in rentsOfUser)
             //{
-            //    do
-            //    {
-            //        Console.WriteLine("Choose a movie ID from the list above (ID): ");
-            //        movieChoice = Console.ReadLine();
-
-            //        if (movie.GetIdMovie() == movieChoice)
-            //        {
-            //            //update table MOVIE, change availability to N
-            //            conexion.Open();
-
-            //            cadena = "UPDATE MOVIE SET Availability = 'N' where IdMovie= '" + movieChoice + "'";
-            //            comando = new SqlCommand(cadena, conexion);
-            //            comando.ExecuteNonQuery();
-
-            //            conexion.Close();
-
-
-            //            //Update table RENTS
-            //            conexion.Open();
-
-            //            rentedMovie = new Rents();
-
-            //            cadena = "INSERT INTO RENTS VALUES ('" + user.GetName() + "','" + movie.GetIdMovie() + "','" + rentedMovie.GetDeadline() + "')";
-            //            comando = new SqlCommand(cadena, conexion);
-            //            SqlDataReader registros = comando.ExecuteReader();
-
-            //            //rentedMovie.SetIdRent(registros["IdRent"].ToString());
-            //            rentedMovie.SetName(registros["UserName"].ToString());
-            //            rentedMovie.SetIdRent(registros["IdRent"].ToString());
-            //            rentedMovie.SetDeadline(DateTime.Parse(registros["RentDeadline"].ToString()));
-
-            //            rentsOfUser.Add(rentedMovie);
-
-            //            Console.WriteLine("You are ready to watch " + movie.GetName() + " Your rent expires in 10 days. Enjoy!");
-            //            conexion.Close();
-            //        }
-            //        if (movie.GetIdMovie() != movieChoice)
-            //        {
-            //            Console.WriteLine("This movie is unavailable or unfortunately doesn't exist in MyMovies yet.");
-
-            //        }
-            //        Console.WriteLine("Would you like to rent another movie? (S/N");
-            //        answer = Console.ReadLine();
-
-            //    } while (answer.ToUpper() != "N");
-            //    Console.WriteLine("/nThanks for your order!");
-            //} else
-            //{
-            //    Console.WriteLine("We are sorry, currently MyMovies does not have any movies available for you.");
+            //    Console.WriteLine(movie.GetIdMovie());
             //}
-           
-         
+        }
+
     }
 }
