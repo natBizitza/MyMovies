@@ -309,13 +309,8 @@ namespace MyMovies
                 if (movie.GetAvailab().Contains("A"))
                 {
                     Console.WriteLine(movie.MostrarDatos() + "\n");
-
-                   
-
                 }
             }
-
-            
 
             do
             {
@@ -337,7 +332,7 @@ namespace MyMovies
                     //Update table RENTS
                     conexion.Open();
 
-                    idRent = movie.GetIdMovie();
+                    idRent = movieChoice;
                     rentedMovie = new Rents();
 
                     idRent = movie.GetIdMovie();
@@ -351,18 +346,21 @@ namespace MyMovies
                     rentedMovie.SetDeadline(DateTime.Parse(registros["RentDeadline"].ToString()));
 
                     rentsOfUser.Add(rentedMovie);
-                    myMovies.Add(movie);
+                    //myMovies.Add(movie);
 
-                    Console.WriteLine("You are ready to watch " + movie.GetName() + " Your rent expires in 10 days. Enjoy!");
-                    Console.ReadLine();
+                    conexion.Close();
+                    //Console.WriteLine("You are ready to watch " + movie.GetName() + " Your rent expires in 10 days. Enjoy!");
+                    //Console.ReadLine();
                 };
+                myMovies.Add(movie);
+                Console.WriteLine("You are ready to watch " + movie.GetName() + " Your rent expires in 10 days. Enjoy!");
+                Console.ReadLine();
 
                 Console.WriteLine("Would you like to rent another movie? (S/N");
                 answer = Console.ReadLine();
-               
 
             } while (answer.ToUpper() != "N") ;
-                Console.WriteLine("/nThanks for your order!");
+                Console.WriteLine("Thanks for your order!");
         }
         public static void MyRents()
         {
