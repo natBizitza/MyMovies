@@ -100,6 +100,7 @@ namespace MyMovies
             } while (option!=LOGOUT);
         }
 
+
         public static void RegisterUser()
         {
             string username, name, password;
@@ -167,7 +168,7 @@ namespace MyMovies
                     user.SetPassword(registros["Password"].ToString());
 
                     //no idea  if it's necessary yet
-                    registeredUser.Add(user);
+                    //registeredUser.Add(user);
                 }
                 conexion.Close();
                 registros.Close();
@@ -237,6 +238,7 @@ namespace MyMovies
         public static void RentMovie()
         {
             string movieChoice, answer = "", idRent;
+            SqlDataReader registros;
             //the list with rents of the user
             rentsOfUser = new List<Rents>();
             myMovies = new List<Movies>();
@@ -273,28 +275,37 @@ namespace MyMovies
                     conexion.Open();
 
                     //idRent will have the same number like the ID of movieChoice
-                    idRent = movieChoice;
+                    idRent = "111";
                     rentedMovie = new Rents();
 
                     idRent = movie.GetIdMovie();
 
-                    cadena = "INSERT INTO RENTS VALUES ('" + idRent + "','" + user.GetUsername() + "','" + movie.GetIdMovie() + "','" + rentedMovie.GetDeadline() + "')";
+                    cadena = "INSERT INTO RENTS VALUES ('" + user.GetUsername() + "','" + movie.GetIdMovie() + "','" + rentedMovie.GetDeadline() + "')";
+                    comando = new SqlCommand(cadena, conexion);                   
+                    comando.ExecuteNonQuery();
+                    conexion.Close();
+
+                    conexion.Open();
+                    cadena = "SELECT [IdRent],r.IdMovie, UserName, MovieName,[RentDeadline] FROM RENTS r, [MOVIE]c WHERE r.IdMovie=c.IdMovie and UserName Like '" + user.GetUsername() + "'";
                     comando = new SqlCommand(cadena, conexion);
-                    SqlDataReader registros = comando.ExecuteReader();
+                    registros = comando.ExecuteReader();
 
-                    rentedMovie.SetIdRent(registros["IdRent"].ToString());
-                    rentedMovie.SetName(registros["UserName"].ToString());
-                    rentedMovie.SetIdRent(registros["IdRent"].ToString());
-                    rentedMovie.SetDeadline(DateTime.Parse(registros["RentDeadline"].ToString()));
+                    // to show my rents
+                    while (registros.Read())
+                    {
+                        Console.WriteLine("Rent ID: " + registros["IdRent"].ToString());
+                        Console.WriteLine("Movie ID: " + registros["IdMovie"].ToString());
+                        Console.WriteLine("Username: " + registros["UserName"].ToString());
+                        Console.WriteLine("Movie: " + registros["MovieName"].ToString());
+}
+                        rentsOfUser.Add(rentedMovie);
 
-                    rentsOfUser.Add(rentedMovie);
-                    //myMovies.Add(movie);
-
+                    Console.WriteLine("You are ready to watch " + rentedMovie.GetName() + " Your rent expires in 10 days. Enjoy!\n");
                     conexion.Close();
                 };
-                myMovies.Add(movie);
-                Console.WriteLine("You are ready to watch " + movie.GetName() + " Your rent expires in 10 days. Enjoy!\n");
-                Console.ReadLine();
+
+                //Console.WriteLine("You are ready to watch " + rentedMovie.GetName() + " Your rent expires in 10 days. Enjoy!\n");
+                //Console.ReadLine();
 
                 Console.WriteLine("Would you like to rent another movie? (S/N)");
                 answer = Console.ReadLine();
@@ -322,7 +333,7 @@ namespace MyMovies
                 Console.WriteLine("Username: " + registros["UserName"].ToString());
                 Console.WriteLine("Movie: " + registros["MovieName"].ToString());
 
-                if (registros["RentDeadline"].ToString() == thisDay.ToString("yyyy-MM-dd"))
+                if (Convert.ToDateTime(registros["RentDeadline"].ToString()) > thisDay)
                 {
                     Console.BackgroundColor = ConsoleColor.Red;
                     Console.WriteLine(registros["RentDeadline"].ToString());
@@ -332,7 +343,9 @@ namespace MyMovies
                 }
                 else
                 {
+                   
                     Console.WriteLine(registros["RentDeadline"].ToString());
+
                 }
                 Console.WriteLine();
             }
