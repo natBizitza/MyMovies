@@ -356,7 +356,7 @@ namespace MyMovies
                 Console.WriteLine("You are ready to watch " + movie.GetName() + " Your rent expires in 10 days. Enjoy!");
                 Console.ReadLine();
 
-                Console.WriteLine("Would you like to rent another movie? (S/N");
+                Console.WriteLine("Would you like to rent another movie? (S/N)");
                 answer = Console.ReadLine();
 
             } while (answer.ToUpper() != "N") ;
