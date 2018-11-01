@@ -275,7 +275,8 @@ namespace MyMovies
                     conexion.Open();
 
                     //idRent will have the same number like the ID of movieChoice
-                    idRent = "111";
+                    
+
                     rentedMovie = new Rents();
 
                     idRent = movie.GetIdMovie();
