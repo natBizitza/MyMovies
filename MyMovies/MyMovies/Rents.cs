@@ -8,7 +8,8 @@ namespace MyMovies
 {
     class Rents
     {
-        private string idRent, userName, idMovie;
+        private string userName, idMovie;
+        private int idRent;
         private DateTime rentDeadline;
 
 
@@ -20,12 +21,16 @@ namespace MyMovies
 
         //GEt & SEt
 
-        public string GetIdRent()
+        public int GetIdRent()
         {
+            //for(int x=1; x>0; x++)
+            //{
+            //    return idRent=x;
+            //}
             return idRent;
         }
 
-        public void SetIdRent(string idRent)
+        public void SetIdRent(int idRent)
         {
             this.idRent = idRent;
         }
