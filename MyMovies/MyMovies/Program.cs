@@ -20,7 +20,9 @@ namespace MyMovies
         static List<Movies> myMovies;
         static private User user;
         static private Movies movie;
+        static private Movies avMoviesforRent;
         static private Rents rentedMovie;
+        
 
 
         static void Main(string[] args)
@@ -207,13 +209,13 @@ namespace MyMovies
          
             while (registros.Read())
             {
-                Console.WriteLine("ID: " + registros["IdMovie"].ToString());
-                Console.WriteLine("Name: " + registros["MovieName"].ToString());
-                Console.WriteLine("Director: " + registros["Director"].ToString());
-                Console.WriteLine("Country of Origin: " + registros["CountryOfOrigin"].ToString());
-                Console.WriteLine("Synopsis: " + registros["Synopsis"].ToString());
-                Console.WriteLine("Age Restriction: " + registros["AgeRestriction"].ToString());
-                Console.WriteLine("Availability (A/N): " + registros["Availability"].ToString());
+                //Console.WriteLine("ID: " + registros["IdMovie"].ToString());
+                //Console.WriteLine("Name: " + registros["MovieName"].ToString());
+                //Console.WriteLine("Director: " + registros["Director"].ToString());
+                //Console.WriteLine("Country of Origin: " + registros["CountryOfOrigin"].ToString());
+                //Console.WriteLine("Synopsis: " + registros["Synopsis"].ToString());
+                //Console.WriteLine("Age Restriction: " + registros["AgeRestriction"].ToString());
+                //Console.WriteLine("Availability (A/N): " + registros["Availability"].ToString());
 
                 movie = new Movies();
 
@@ -260,8 +262,11 @@ namespace MyMovies
                 if (movie.GetAvailab().Contains("A"))
                 {
                     Console.WriteLine(movie.MostrarDatos() + "\n");
-                }
 
+                    //avMoviesforRent = new Movies();
+
+                    //myMovies.Add(avMoviesforRent);
+                }
             }
 
             do
@@ -269,32 +274,35 @@ namespace MyMovies
                 Console.WriteLine("Choose a movie ID from the list above (ID): ");
                int  movieChoice = Convert.ToInt32(Console.ReadLine());
 
-                if (Convert.ToInt32(movie.GetIdMovie())-1 == movieChoice)
+                foreach(Movies movie in allMoviesForUser)
                 {
-                    //update table MOVIE, change availability to N
-                    conexion.Open();
+                    if(Convert.ToInt32(movie.GetIdMovie()) == movieChoice)
+                    {
+                        conexion.Open();
 
-                    cadena = "UPDATE MOVIE SET Availability = 'N' where IdMovie= '" + movieChoice + "'";
-                    comando = new SqlCommand(cadena, conexion);
-                    comando.ExecuteNonQuery();
+                        cadena = "UPDATE MOVIE SET Availability = 'N' where IdMovie= '" + movieChoice + "'";
+                        comando = new SqlCommand(cadena, conexion);
+                        comando.ExecuteNonQuery();
 
-                    conexion.Close();
+                        conexion.Close();
 
 
-                    //Update table RENTS
-                    conexion.Open();
+                        //Update table RENTS
+                        conexion.Open();
 
-                    rentedMovie = new Rents();
+                        rentedMovie = new Rents();
 
-                    cadena = "INSERT INTO RENTS (UserName, IdMovie, RentDeadline) VALUES ('" + user.GetUsername() + "','" + movieChoice + "','" + rentedMovie.GetDeadline().ToString("yyyy/mm/dd") + "')";
-                    comando = new SqlCommand(cadena, conexion);                   
-                    comando.ExecuteNonQuery();
-                    conexion.Close();
+                        cadena = "INSERT INTO RENTS (UserName, IdMovie, RentDeadline) VALUES ('" + user.GetUsername() + "','" + movieChoice + "','" + rentedMovie.GetDeadline() + "')";
+                        comando = new SqlCommand(cadena, conexion);
+                        comando.ExecuteNonQuery();
+                        conexion.Close();
 
-                    Console.WriteLine("You are ready to watch " + movie.GetName() + " Your rent expires in 10 days. Enjoy!\n");
-                    Console.ReadLine();
-                };
+                        Console.WriteLine("You are ready to watch " + movie.GetName() + " Your rent expires in 10 days. Enjoy!\n");
+                        Console.ReadLine();                     
+                    }
 
+                }
+               
                 Console.WriteLine("Would you like to rent another movie? (S/N)");
                 answer = Console.ReadLine();
 
@@ -321,7 +329,7 @@ namespace MyMovies
                 Console.WriteLine("Username: " + registros["UserName"].ToString());
                 Console.WriteLine("Movie: " + registros["MovieName"].ToString());
 
-                if (Convert.ToDateTime(registros["RentDeadline"].ToString()) > thisDay)
+                if (Convert.ToDateTime(registros["RentDeadline"].ToString()) < thisDay)
                 {
                     Console.BackgroundColor = ConsoleColor.Red;
                     Console.WriteLine(registros["RentDeadline"].ToString());
